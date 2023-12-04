@@ -31,7 +31,30 @@ public class UserServiceImpl implements UserService{
 			return userMap.get(userId);
 		}
 		
-		return new User();
+		return null;
 	}
+
+	@Override
+	public Boolean updateUser(User user) {
+		if(userMap.containsKey(user.id)) {
+			addUser(user);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean deleteUser(Integer userId) {
+		
+		if(userMap.containsKey(userId)) {
+			userMap.remove(userId);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
 
 }

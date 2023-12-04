@@ -29,6 +29,10 @@ public class SparkController {
 			response.type("application/json");
 			User userData = userService.getUser(Integer.parseInt(request.params(":id")));
 			
+			if(userData == null) {
+				return new Gson().toJson(new UserResponse("User data of " + request.params(":id"), StatusResponse.SUCCESS, new Gson().toJsonTree("empty")));
+			}
+			
 			return new Gson().toJson(new UserResponse("User data of " + request.params(":id"), StatusResponse.SUCCESS, new Gson().toJsonTree(userData)));
 		});
 		
@@ -42,12 +46,26 @@ public class SparkController {
 			return new Gson().toJson(new UserResponse("All user data", StatusResponse.SUCCESS, new Gson().toJsonTree(data)));
 		});
 		
-//		User user = new User();
-//		user.firstName = "root";
-//		user.id = "1";
-//		userService.addUser(user);
-//		
-//		System.out.println(userService.getUser("1")); 
+		post("/updateuser", (request, response) -> {
+			User user = new Gson().fromJson(request.body(), User.class);
+			Boolean isUpdated = userService.updateUser(user);
+			
+			if (isUpdated) {
+				return new Gson().toJson(new UserResponse(StatusResponse.SUCCESS));
+			}
+			return new Gson().toJson(new UserResponse(StatusResponse.ERROR));
+		});
+		
+		post("/deleteuser/:id", (request, response) -> {
+		    response.type("application/json");
+		    
+		    Boolean isDeleted = userService.deleteUser(Integer.parseInt(request.params(":id")));
+		    
+		    if (isDeleted) {
+				return new Gson().toJson(new UserResponse("User Deleted Successfully", StatusResponse.SUCCESS));
+			}
+			return new Gson().toJson(new UserResponse("User Id Doesn't Exist", StatusResponse.ERROR));
+		});
 		
 	}
 

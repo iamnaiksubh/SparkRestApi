@@ -9,4 +9,6 @@ public interface UserService {
 	public void addUser(User user);
 	public Collection<User> getUsers();
 	public User getUser(Integer userId);
+	public Boolean updateUser(User user);
+	public Boolean deleteUser(Integer userId);
 }
